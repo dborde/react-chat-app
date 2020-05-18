@@ -1,0 +1,66 @@
+// ------------- ANIMATIONS (BASED ON REACT-TRANSITION-GROUP) ------------- //
+
+// ------------- FADE ------------- //
+
+.fade-appear {
+  opacity: 0;
+}
+
+.fade-appear-active {
+  opacity: 1;
+  transition: all $transition-short / 3 ease-in-out;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: all $transition-short / 3 ease-in-out;
+}
+
+// ------------- FADE SLIDE ------------- //
+
+.fade-slide-enter {
+  opacity: 0;
+  transform: translateX($space);
+}
+
+.fade-slide-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all $transition-short ease-in-out;
+}
+
+.fade-slide-exit {
+  opacity: 0;
+  transform: translateX(-$space);
+}
+
+.fade-slide-exit-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all $transition-short ease-in-out;
+}
+
+// ------------- FADE SLIDE LEFT ------------- //
+
+.fade-slide-left-enter {
+  opacity: 0;
+  transform: translateX($space);
+}
+
+.fade-slide-left-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all $transition-short ease-in-out;
+}
+
+.fade-slide-left-exit {
+  visibility: hidden;
+}
+
+.fade-slide-left-exit-active {
+  visibility: hidden;
+}

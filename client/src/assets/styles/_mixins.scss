@@ -1,0 +1,66 @@
+// ------------- MIXINS ------------- //
+
+// STANDARD MEDIA QUERY
+
+@mixin media($breakpoint, $breakpoints-map: $breakpoints) {
+  @if map-has-key($breakpoints-map, $breakpoint) {
+    $breakpoint: map-get($breakpoints-map, $breakpoint);
+
+    @media (max-width: $breakpoint) {
+      @content;
+    }
+  } @else if $breakpoint == print {
+    @media print {
+      @content;
+    }
+  } @else {
+    @media (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+// MEDIA QUERY MIN, EXAMPLE: EVERYTHING ABOVE MOBILE;
+
+@mixin media-min($breakpoint, $breakpoints-map: $breakpoints) {
+  @if map-has-key($breakpoints-map, $breakpoint) {
+    $breakpoint: map-get($breakpoints-map, $breakpoint);
+
+    @media (min-width: $breakpoint + 1px) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $breakpoint + 1px) {
+      @content;
+    }
+  }
+}
+
+// MEDIA QUERY RANGE, EXAMPLE: EVERYTHING BETWEEN TABLET AND DESKTOP;
+
+@mixin media-range(
+  $breakpoint-min,
+  $breakpoint-max,
+  $breakpoints-map: $breakpoints
+) {
+  @if map-has-key($breakpoints-map, $breakpoint-min) {
+    $breakpoint-min: map-get($breakpoints-map, $breakpoint-min);
+    $breakpoint-max: map-get($breakpoints-map, $breakpoint-max);
+
+    @media (min-width: $breakpoint-min + 1px) and (max-width: $breakpoint-max) {
+      @content;
+    }
+  } @else {
+    @media (min-width: $breakpoint-min + 1px) and (max-width: $breakpoint-max) {
+      @content;
+    }
+  }
+}
+
+// IE 11 FLEXBOX SUPPORT
+
+@mixin flex($grow, $shrink, $basis) {
+  flex-basis: $basis;
+  flex-grow: $grow;
+  flex-shrink: $shrink;
+}

@@ -1,34 +1,25 @@
 {
-  "name": "react-chat-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
-  },
+  "name": "react-chat-app-express",
+  "version": "1.0.0",
+  "description": "Chat App using create-react-app with a Node Express Backend",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "client": "cd client && yarn start",
+    "server": "nodemon server/index.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "dev:server": "cd client && yarn build && cd .. && yarn start",
+    "start": "node server/index.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "bad-words": "^3.0.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "nodemon": "^2.0.4"
+  },
+  "author": "David Borde",
+  "license": "ISC"
 }

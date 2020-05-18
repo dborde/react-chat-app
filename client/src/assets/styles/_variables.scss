@@ -1,0 +1,61 @@
+// ------------- VARIABLES ------------- //
+
+// ------------- MEDIA QUERIES ------------- //
+
+$x-large-media-query-size: 1600px;
+$large-media-query-size: 1280px;
+$medium-media-query-size: 1024px;
+$small-media-query-size: 640px;
+
+// ------------- BREAKPOINTS MAP ------------- //
+
+$breakpoints: (
+  x-large: $x-large-media-query-size,
+  large: $large-media-query-size,
+  medium: $medium-media-query-size,
+  small: $small-media-query-size
+);
+
+// ------------- MAX WIDTH ------------- //
+
+$max-width: 1280px;
+
+// ------------- SPACE/MARGINS/PADDING ------------- //
+
+$space-small: 1rem;
+$space: 1.4rem;
+$space-large: 1.8rem;
+
+// ------------- TRANSITIONS ------------- //
+
+$transition-short: 0.2s;
+$transition-medium: 0.4s;
+$transition-long: 0.6s;
+
+// ------------- COLORS ------------- //
+
+$gray-dark: #5a5a5a;
+$gray-medium: #d8d8d8;
+$gray-light: #f2f2f2;
+
+$color-primary: $gray-dark;
+$color-secondary: $gray-dark;
+$color-tertiary: $color-secondary;
+
+$color-error: #e74c3c;
+$color-success: #2ecc71;
+$color-warn: #f39c12;
+
+// ------------- FONTS ------------- //
+
+$primary-font: "Open Sans", sans-serif;
+
+// ------------- FONT WEIGHTS ------------- //
+
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// ------------- BORDER RADIUS ------------- //
+
+$border-radius: 3px;
