@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import io from "socket.io-client";
+import LoaderSkeleton from "../components/loader";
 import moment from "moment";
-import Messages from "../components/messages"
+import Messages from "../components/messages";
+import Users from "../components/users";
+
 
 const ENDPOINT = "http://localhost:5000";
 const socket = io(ENDPOINT);
 
 const initialState = {
-  users: [],
-  messages: [],
-  message: '',
   disabled: false,
   fetchingLocation: false,
-  isSideBarActive: false
+  isSideBarActive: false,
+  message: '',
+  messages: [],
+  room: '',
+  users: []
 }
 
 class Chat extends Component {
@@ -38,19 +42,35 @@ class Chat extends Component {
     });
 
     socket.on('message', (message) => {
-      const html = {
+      const data = {
         username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
       }
       this.textInput.current.focus();
-      this.setState({messages: [...this.state.messages, html]});
+      this.setState({messages: [...this.state.messages, data]});
+      this.autoscroll();  
+    });
+
+    socket.on('locationMessage', (message) => {
+      const data = {
+        username: message.username,
+        url: message.url,
+        createdAt: moment(message.createdAt).format('h:mm a')
+      }
+      this.setState({messages: [...this.state.messages, data]});
       this.autoscroll();
-    })
+    });
+
+    socket.on('roomData', ({room, users}) => {
+      this.setState({users, room});
+    });
   }
 
+
   autoscroll = () => {
-    const $messages = document.querySelector('#messages');
+    const $messagesWrap = document.querySelector('#messages');
+    const $messages = document.querySelector('#messages div');
     // New message element
     const $newMessage = $messages.lastElementChild;
     if ($newMessage !== null) {
@@ -60,17 +80,17 @@ class Chat extends Component {
       const newMessageHeight = $newMessage.offsetHeight + newMessageMargin;
 
       // Visible height
-      const visibleHeight =  $messages.offsetHeight;
+      const visibleHeight =  $messagesWrap.offsetHeight;
 
       // Height of messages container
       const containerHeight = $messages.scrollHeight;
       
       // How far have I scrolled
-      const scrollOffset = $messages.scrollTop + visibleHeight;
-      console.log(scrollOffset);
+      const scrollOffset = $messagesWrap.scrollTop + visibleHeight;
+   
       if (containerHeight - newMessageHeight <= scrollOffset) {
         // scroll to bottom
-        $messages.scrollTop = $messages.scrollHeight
+        $messagesWrap.scrollTop = $messagesWrap.scrollHeight
       }
     }
   }
@@ -86,7 +106,6 @@ class Chat extends Component {
     this.setState({isSideBarActive: !this.state.isSideBarActive})
   }
 
-
   onInputUpdate = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -101,7 +120,7 @@ class Chat extends Component {
     });
   } 
 
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
     const message = this.state.message;
     this.setState({ disabled: true });
@@ -112,28 +131,46 @@ class Chat extends Component {
        if (error) {
         return console.log(error)
       }
-    })
-   
+    })  
   };
+
+  sendLocation = e => {
+    e.preventDefault();
+    if (!navigator.geolocation) {
+      return alert('Geolocation is not supported by your browser.')
+    }
+    
+    this.setState({ disabled: true, fetchingLocation: true });
+  
+    navigator.geolocation.getCurrentPosition((position) => {
+      socket.emit('sendLocation', {
+        lat: position.coords.latitude,
+        long: position.coords.longitude
+      }, () => {
+        this.setState({ disabled: false, fetchingLocation: false });
+      })
+    });
+  }
 
 
   render() {
-    const { isSideBarActive, message, disabled, messages } = this.state;
+    const { disabled, fetchingLocation, isSideBarActive, message, messages, room, users } = this.state;
     return (
       <React.Fragment>
         <div className="chat">
-
           <i onClick={this.toggleSideBar} className={`mobile-menu fas fa-bars ${isSideBarActive ? "active" : ""}`}></i>
           <div id="sidebar" className={`chat__sidebar ${isSideBarActive ? "active" : ""}`}>
-            <div id="sidebar-users"></div>
+            <div id="sidebar-users">
+              <Users users={users} room={room}/>
+            </div>
             <div id="sidebar-rooms"></div>
           </div>
 
           <div className={`chat__main ${isSideBarActive ? "active" : ""}`}>
+            {fetchingLocation && <LoaderSkeleton height="100vh" />}
             <div id="messages" className="chat__messages">
               <Messages data={messages} />
             </div>
-
             <div className="compose" onSubmit={(e) => this.handleSubmit(e)}>
               <form id="message-form">
                 <input
@@ -150,7 +187,7 @@ class Chat extends Component {
                       <span className="tooltiptext">Send Message</span>
                     </i>
                   </button>
-                  <button disabled={disabled} id="send-location" className="btn">
+                  <button disabled={disabled} id="send-location" className="btn" onClick={(e) => this.sendLocation(e)}>
                     <i className="tooltip far fa-compass" alt="send location" title="send location">
                       <span className="tooltiptext">Send Location</span>
                     </i>         

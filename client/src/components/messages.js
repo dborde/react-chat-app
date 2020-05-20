@@ -1,17 +1,17 @@
 import React from 'react';
 
-export const Messages = (props) => {
-  return (<React.Fragment>
+const Messages = (props) => {
+  return (<div>
     {props.data.map((obj, index) => typeof obj.username !== 'undefined' ? (
       <div key={index} className="message">
       <p>
         <span className="message__name">{obj.username}</span>
         <span className="message__meta">{obj.createdAt}</span>
       </p>
-      <p>{obj.message}</p>
+      {obj.url ? (<p><a href={obj.url} target="_blank">My current location</a></p>) : (<p>{obj.message}</p>) }
     </div>
     ) : null )}
-    </React.Fragment>);
+    </div>);
   }
 
   export default Messages;

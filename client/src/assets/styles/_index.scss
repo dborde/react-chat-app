@@ -160,47 +160,56 @@ button:disabled {
   background: #7c5cbf94;
 }
 
-.tooltip {
-  border-bottom: 1px dotted black;
-  display: inline-block;
-  position: relative;
-}
 
-.tooltip .tooltiptext {
-  background-color: #555;
-  border-radius: 6px;
-  bottom: 200%;
-  color: #fff;
-  font-family: $primary-font;
-  font-size: 0.8rem;
-  font-weight: 500;
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  padding: 5px 0;
-  position: absolute;
-  text-align: center;
-  text-transform: none;
-  transition: opacity 0.3s;
-  visibility: hidden;
-  width: 120px;
-  z-index: 1;
+// ------------- TOOLTIPS: none for touch device ------------- //
+.tooltiptext {
+  @media (hover: none) {
+    display: none;
+  }
 }
+@media (hover: hover) {
+  .tooltip {
+    border-bottom: 1px dotted black;
+    display: inline-block;
+    position: relative;
+  }
 
-.tooltip .tooltiptext::after {
-  border-color: #555 transparent transparent transparent;
-  border-style: solid;
-  border-width: 5px;
-  content: "";
-  left: 50%;
-  margin-left:34px;
-  position: absolute;
-  top: 100%;
-}
+  .tooltip .tooltiptext {
+    background-color: #555;
+    border-radius: 6px;
+    bottom: 200%;
+    color: #fff;
+    font-family: $primary-font;
+    font-size: 0.8rem;
+    font-weight: 500;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    text-transform: none;
+    transition: opacity 0.3s;
+    visibility: hidden;
+    width: 120px;
+    z-index: 1;
+  }
 
-.tooltip:hover .tooltiptext {
-  opacity: 1;
-  visibility: visible;
+  .tooltip .tooltiptext::after {
+    border-color: #555 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px;
+    content: "";
+    left: 50%;
+    margin-left:34px;
+    position: absolute;
+    top: 100%;
+  }
+
+  .tooltip:hover .tooltiptext {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 // ------------- JOIN PAGE STYLES ------------- //
@@ -297,6 +306,10 @@ button:disabled {
   flex-grow: 1;
   overflow-y: scroll;
   padding: $space-large $space-large 0 $space-large;
+
+  @include media(small) {
+    padding:  $space-large * 2  $space-large 0 $space-large * 2;
+  }
 }
 
 // ------------- MESSAGE STYLES ------------- //
@@ -372,4 +385,14 @@ button:disabled {
 .switch-link a {
   color: #fff;
   text-decoration: underline;
+}
+
+.react-skeleton-load {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  &:after {
+    content: "...fetching your location";
+  }
 }
