@@ -66,10 +66,6 @@ io.on('connection', (socket) => {
       return callback(error)
     }
 
-    console.log('user.room')
-    console.log(user.room)
-
-
     socket.join(user.room)
     // sending to sender-client only
     socket.emit('message', generateMessage('Admin', 'Welcome!'))
@@ -88,12 +84,7 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', (message, callback) => {
     const user = getUser(socket.id)
-    console.log('user')
-    console.log(user)
     const filter = new Filter()
-
-    console.log('message')
-    console.log(message)
 
     if (filter.isProfane(message)) {
       return callback('Profanity is not allowed!')
@@ -125,7 +116,7 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('switchRoom', (username, room) => {
+  socket.on('switchRoom', () => {
     socket.leave(socket.room)
     const user = removeUser(socket.id)
 

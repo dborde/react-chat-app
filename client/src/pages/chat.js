@@ -5,7 +5,7 @@ import LoaderSkeleton from "../components/loader";
 import moment from "moment";
 import Messages from "../components/messages";
 import Users from "../components/users";
-
+import { ActiveRooms } from "../components/rooms";
 
 const ENDPOINT = "http://localhost:5000";
 const socket = io(ENDPOINT);
@@ -17,6 +17,7 @@ const initialState = {
   message: '',
   messages: [],
   room: '',
+  rooms: [],
   users: []
 }
 
@@ -30,14 +31,15 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    this.textInput.current.focus();
     const params = {
       username: this.props.match.params.username,
       room: this.props.match.params.room
     }
-    socket.emit('join', params, (err) => {
-      if (err) {
-        this.props.history.push('/');
+    socket.emit('join', params, (error) => {
+      if (error) {
+        alert(error);
+        // this.props.history.push('/');
+        window.location.href = '/';
       }
     });
 
@@ -48,8 +50,7 @@ class Chat extends Component {
         createdAt: moment(message.createdAt).format('h:mm a')
       }
       this.textInput.current.focus();
-      this.setState({messages: [...this.state.messages, data]});
-      this.autoscroll();  
+      this.setState({messages: [...this.state.messages, data]}, () => this.autoscroll());
     });
 
     socket.on('locationMessage', (message) => {
@@ -58,12 +59,15 @@ class Chat extends Component {
         url: message.url,
         createdAt: moment(message.createdAt).format('h:mm a')
       }
-      this.setState({messages: [...this.state.messages, data]});
-      this.autoscroll();
+      this.setState({messages: [...this.state.messages, data]}, () => this.autoscroll());
     });
 
     socket.on('roomData', ({room, users}) => {
       this.setState({users, room});
+    });
+
+    socket.on('roomsList', ({rooms}) => {
+      this.setState({rooms});
     });
   }
 
@@ -134,6 +138,16 @@ class Chat extends Component {
     })  
   };
 
+  switchRoom = (newroom) => {
+    const username = this.props.match.params.username
+    
+    socket.emit('switchRoom', username, newroom );
+
+    // this.props.history.push(`/chat/${username}/${newroom}`)
+    window.location.href = `/chat/${username}/${newroom}`
+    
+  }
+
   sendLocation = e => {
     e.preventDefault();
     if (!navigator.geolocation) {
@@ -154,7 +168,7 @@ class Chat extends Component {
 
 
   render() {
-    const { disabled, fetchingLocation, isSideBarActive, message, messages, room, users } = this.state;
+    const { disabled, fetchingLocation, isSideBarActive, message, messages, room, rooms, users } = this.state;
     return (
       <React.Fragment>
         <div className="chat">
@@ -163,7 +177,9 @@ class Chat extends Component {
             <div id="sidebar-users">
               <Users users={users} room={room}/>
             </div>
-            <div id="sidebar-rooms"></div>
+            <div id="sidebar-rooms">
+              <ActiveRooms rooms={rooms} switchRoom={this.switchRoom}/>
+            </div>
           </div>
 
           <div className={`chat__main ${isSideBarActive ? "active" : ""}`}>

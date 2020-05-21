@@ -8,7 +8,7 @@ const Messages = (props) => {
         <span className="message__name">{obj.username}</span>
         <span className="message__meta">{obj.createdAt}</span>
       </p>
-      {obj.url ? (<p><a href={obj.url} target="_blank">My current location</a></p>) : (<p>{obj.message}</p>) }
+      {obj.url ? (<p><a href={obj.url} target="_blank" rel="noopener noreferrer">My current location</a></p>) : (<p>{obj.message}</p>) }
     </div>
     ) : null )}
     </div>);

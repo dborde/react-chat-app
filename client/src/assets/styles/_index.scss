@@ -46,6 +46,7 @@ h2 {
 
 h3 {
   font-size: 1.563rem;
+  font-weight: $font-weight-normal;
 }
 
 h4 {
@@ -123,7 +124,7 @@ button {
   color: white;
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
   padding: $space-small;
   text-transform: uppercase;
   transition: background .3s ease;
@@ -181,7 +182,7 @@ button:disabled {
     color: #fff;
     font-family: $primary-font;
     font-size: 0.8rem;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
     left: 50%;
     margin-left: -100px;
     opacity: 0;
@@ -320,7 +321,7 @@ button:disabled {
 
 .message__name {
   font-size: 1rem;
-  font-weight: 600; 
+  font-weight: $font-weight-bold; 
   margin-right: $space-small;
 }
 
@@ -364,20 +365,16 @@ button:disabled {
 
 .room-title {
   background: #2c2f3a;
-  font-size: 2rem;
-  font-weight: 400;  
   padding: $space-large;   
 }
 
 .list-title {
-  font-size: 1.5rem;
-  font-weight: 500;
   margin-bottom: 4px;
   padding: $space $space-large 0 $space-large;
 }
 
 .users, .rooms {
-  font-weight: 300;
+  font-weight: $font-weight-normal;
   list-style-type: none;
   padding: $space $space-large 0 $space-large;
 }

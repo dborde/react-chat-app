@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-// import io from "socket.io-client";
+import io from "socket.io-client";
+import { Rooms } from "../components/rooms";
 
-// const ENDPOINT = "http://localhost:5000";
-// const socket = io(ENDPOINT);
+const ENDPOINT = "http://localhost:5000";
+const socket = io(ENDPOINT);
 
-const initialState = {
-  username: '',
-  room: ''
+const initialState = { 
+  room: '',
+  rooms: [],
+  username: ''
 }
 
 class Join extends Component {
@@ -16,6 +18,12 @@ class Join extends Component {
     this.state = {
       ...initialState
     }
+  }
+
+  componentDidMount() {
+    socket.on('roomsList', ( {rooms} ) => {
+      this.setState({rooms});
+    });
   }
 
   clearForm() {
@@ -40,14 +48,17 @@ class Join extends Component {
   }
 
   render() {
-    const { username, room } = this.state;
+    const { room, rooms, username } = this.state;
     return (
       <div className="row">
         <div className="col-xs">
           <form className="centered-form__box">
             <h2>Join</h2>
             <input name="username" placeholder="Display name" autoComplete="off" value={username} onChange={this.onInputUpdate} />
-            <input name="room" placeholder="Room" autoComplete="off" value={room} onChange={this.onInputUpdate} />
+            <input type="text" list="rooms" name="room" placeholder="Room" autoComplete="off" value={room} onChange={this.onInputUpdate} />
+            <datalist id="rooms">
+              <Rooms rooms={rooms} />
+            </datalist>
             <button onClick={this.join}>Join</button>
           </form>
         </div>

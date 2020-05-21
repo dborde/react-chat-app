@@ -33,9 +33,6 @@ const addUser = ({ id, username, room }) => {
 const getRoomsList = () => {
   // This function will get a list of all distinct rooms with at least one user
   const rooms = users.map((user) => user.room);
-
-  console.log('rooms: utils Users getRoomsList:')
-  console.log(rooms)
   return [...new Set(rooms)]
 };
 
