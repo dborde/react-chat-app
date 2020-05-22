@@ -49,7 +49,7 @@ class Chat extends Component {
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
       }
-      this.textInput.current.focus();
+      this.textInput?.current && this.textInput.current.focus();
       this.setState({messages: [...this.state.messages, data]}, () => this.autoscroll());
     });
 
@@ -166,14 +166,13 @@ class Chat extends Component {
     });
   }
 
-
   render() {
     const { disabled, fetchingLocation, isSideBarActive, message, messages, room, rooms, users } = this.state;
     return (
       <React.Fragment>
-        <div className="chat">
+        <div className="chat" style={{height: window.innerHeight}}>
           <i onClick={this.toggleSideBar} className={`mobile-menu fas fa-bars ${isSideBarActive ? "active" : ""}`}></i>
-          <div id="sidebar" className={`chat__sidebar ${isSideBarActive ? "active" : ""}`}>
+          <div id="sidebar" className={`chat__sidebar ${isSideBarActive ? "active" : ""}`} style={{height: window.innerHeight}}>
             <div id="sidebar-users">
               <Users users={users} room={room}/>
             </div>
@@ -183,7 +182,7 @@ class Chat extends Component {
           </div>
 
           <div className={`chat__main ${isSideBarActive ? "active" : ""}`}>
-            {fetchingLocation && <LoaderSkeleton height="100vh" />}
+            {fetchingLocation && <LoaderSkeleton height={`${window.innerHeight}px`} />}
             <div id="messages" className="chat__messages">
               <Messages data={messages} />
             </div>

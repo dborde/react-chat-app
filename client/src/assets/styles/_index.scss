@@ -1,85 +1,7 @@
 @import "./_variables";
+@import "./_base";
 
-// ------------- GLOBAL ------------- //
-
-html {
-  -webkit-font-smoothing: subpixel-antialiased;
-
-  /* Preserve HTML font-size when iPhone orientation changes from landscape to portrait */
-  -webkit-text-size-adjust: 100%;
-
-  @include media-min(small) {
-    font-size: 15px;
-  }
-
-  @include media(small) {
-    font-size: 13px;
-  }
-}
-
-body {
-  background-color: $gray-light;
-  color: $gray-dark;
-  font-family: $primary-font;
-  line-height: 1.5;
-
-  // NOTIFICATION
-
-  > div:last-of-type,
-  .react-toast-notifications__container {
-    padding: 0;
-    position: static;
-  }
-}
-
-// ------------- TYPOGRAPHY (MAJOR THIRD TYPE SCALE) ------------- //
-
-h1 {
-  font-size: 2.441rem;
-  font-weight: $font-weight-normal;
-}
-
-h2 {
-  font-size: 1.953rem;
-  font-weight: $font-weight-normal;
-}
-
-h3 {
-  font-size: 1.563rem;
-  font-weight: $font-weight-normal;
-}
-
-h4 {
-  font-size: 1.25rem;
-}
-
-h5 {
-  font-size: 1.2rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-p {
-  font-size: 1rem;
-}
-
-small {
-  font-size: 0.85rem;
-}
-
-a,
-ins,
-u {
-  color: $gray-dark;
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
+// ------------- GENERAL STYLES ------------- //
 
 * {
   box-sizing: border-box;
@@ -125,9 +47,12 @@ button {
   cursor: pointer;
   font-size: 1rem;
   font-weight: $font-weight-medium;
+  overflow: hidden;
   padding: $space-small;
+  text-overflow: ellipsis;
   text-transform: uppercase;
   transition: background .3s ease;
+
 }
 
 .btn {
@@ -159,58 +84,6 @@ button:hover {
 button:disabled {
   cursor: default;
   background: #7c5cbf94;
-}
-
-
-// ------------- TOOLTIPS: none for touch device ------------- //
-.tooltiptext {
-  @media (hover: none) {
-    display: none;
-  }
-}
-@media (hover: hover) {
-  .tooltip {
-    border-bottom: 1px dotted black;
-    display: inline-block;
-    position: relative;
-  }
-
-  .tooltip .tooltiptext {
-    background-color: #555;
-    border-radius: 6px;
-    bottom: 200%;
-    color: #fff;
-    font-family: $primary-font;
-    font-size: 0.8rem;
-    font-weight: $font-weight-medium;
-    left: 50%;
-    margin-left: -100px;
-    opacity: 0;
-    padding: 5px 0;
-    position: absolute;
-    text-align: center;
-    text-transform: none;
-    transition: opacity 0.3s;
-    visibility: hidden;
-    width: 120px;
-    z-index: 1;
-  }
-
-  .tooltip .tooltiptext::after {
-    border-color: #555 transparent transparent transparent;
-    border-style: solid;
-    border-width: 5px;
-    content: "";
-    left: 50%;
-    margin-left:34px;
-    position: absolute;
-    top: 100%;
-  }
-
-  .tooltip:hover .tooltiptext {
-    opacity: 1;
-    visibility: visible;
-  }
 }
 
 // ------------- JOIN PAGE STYLES ------------- //
@@ -245,13 +118,6 @@ button:disabled {
 
 .chat {
   display: flex;
-  transition-property: display;
-
-  @include media(small) {
-    &.active {
-      display: inline;
-    }
-  }
 }
 
 .mobile-menu {
@@ -274,10 +140,8 @@ button:disabled {
   color: white;
   height: 100vh;
   overflow-y: scroll;
-  transition-property: width;
-  transition-duration: 0.5s;
+  transition: width $transition-short;
   width: 255px;
-
   @include media(small) {
     width: 0;
 
@@ -286,7 +150,6 @@ button:disabled {
     }
   }
 }
-
 
 // ------------- CHAT STYLES ------------- //
 
@@ -344,13 +207,9 @@ button:disabled {
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 10; 
+    z-index: 10;
   }
 }
-
-// .compose form {
-
-// }
 
 .compose input {
   border: 1px solid #eeeeee;
@@ -365,23 +224,42 @@ button:disabled {
 
 .room-title {
   background: #2c2f3a;
-  padding: $space-large;   
+  overflow: hidden;
+  padding: $space-small $space-large;
+  text-overflow: ellipsis;
+
+  @include media(small) {
+    padding: $space-large * 1.5 $space-large $space;
+  }
 }
 
 .list-title {
   margin-bottom: 4px;
-  padding: $space $space-large 0 $space-large;
+  width: max-content;
+  padding: $space-small $space-large 0 $space-large;
 }
 
 .users, .rooms {
   font-weight: $font-weight-normal;
   list-style-type: none;
-  padding: $space $space-large 0 $space-large;
+  padding: $space-small $space-large $space-large $space-large;
 }
 
-.switch-link a {
-  color: #fff;
-  text-decoration: underline;
+li.switch-room {
+  background: $gray-medium;
+  border-bottom: 1px solid $gray-light;
+
+  &:hover {
+    background: $gray-light;
+    border: 1px solid $gray-dark;
+  }
+  
+  & button {
+    background: none;
+    color: $gray-dark;
+    text-align: left;
+    width: 100%
+  }
 }
 
 .react-skeleton-load {
@@ -390,6 +268,57 @@ button:disabled {
   justify-content: center;
 
   &:after {
-    content: "...fetching your location";
+    content: "fetching your location";
+  }
+}
+
+// ------------- TOOLTIPS: none for touch device ------------- //
+.tooltiptext {
+  @media (hover: none) {
+    display: none;
+  }
+}
+@media (hover: hover) {
+  .tooltip {
+    border-bottom: 1px dotted black;
+    display: inline-block;
+    position: relative;
+  }
+
+  .tooltip .tooltiptext {
+    background-color: #555;
+    border-radius: 6px;
+    bottom: 200%;
+    color: #fff;
+    font-family: $primary-font;
+    font-size: 0.8rem;
+    font-weight: $font-weight-medium;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    text-transform: none;
+    transition: opacity 0.3s;
+    visibility: hidden;
+    width: 120px;
+    z-index: 1;
+  }
+
+  .tooltip .tooltiptext::after {
+    border-color: #555 transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px;
+    content: "";
+    left: 50%;
+    margin-left:34px;
+    position: absolute;
+    top: 100%;
+  }
+
+  .tooltip:hover .tooltiptext {
+    opacity: 1;
+    visibility: visible;
   }
 }
