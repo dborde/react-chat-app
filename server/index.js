@@ -42,18 +42,18 @@ const io = socketio(server)
 const port = process.env.PORT || 5000
 const publicDirectoryPath = path.join(__dirname, '../public')
 
-// console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-// if (process.env.NODE_ENV === 'production') {
-//   // Serve any static files
-//   app.use(express.static(path.join(__dirname, 'client/build')));
+console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'production') {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'client/build')));
     
-//   // Handle React routing, return all requests to React app
-//   app.get('*', function(req, res) {
-//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-//   });
-// } else {
-//   app.use(express.static(publicDirectoryPath))
-// }
+  // Handle React routing, return all requests to React app
+  app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });
+} else {
+  app.use(express.static(publicDirectoryPath))
+}
 
 app.use(express.static(publicDirectoryPath))
 
