@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import io from "socket.io-client";
 import { Rooms } from "../components/rooms";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/"; // dev"http://localhost:5000"; 
 const socket = io(ENDPOINT);
 
 const initialState = { 

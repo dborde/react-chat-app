@@ -7,7 +7,7 @@ import Messages from "../components/messages";
 import Users from "../components/users";
 import { ActiveRooms } from "../components/rooms";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/"; // dev"http://localhost:5000"; 
 const socket = io(ENDPOINT);
 
 const initialState = {
