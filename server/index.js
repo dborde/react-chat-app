@@ -57,9 +57,9 @@ const publicDirectoryPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirectoryPath))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(publicDirectoryPath, 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(publicDirectoryPath, 'index.html'));
+// });
 
 io.on('connection', (socket) => {
   console.log('New WebSocket connection')
