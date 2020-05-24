@@ -7,7 +7,7 @@ import Messages from "../components/messages";
 import Users from "../components/users";
 import { ActiveRooms } from "../components/rooms";
 
-const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/"; // dev"http://localhost:5000"; https://borde-react-chat-app.herokuapp.com/socket.io/?EIO=4&transport=websocket
+const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
 
 const socket = io(ENDPOINT);
 
@@ -71,7 +71,6 @@ class Chat extends Component {
       this.setState({rooms});
     });
   }
-
 
   autoscroll = () => {
     const $messagesWrap = document.querySelector('#messages');
@@ -182,7 +181,7 @@ class Chat extends Component {
             </div>
           </div>
 
-          <div className={`chat__main ${isSideBarActive ? "active" : ""}`}>
+          <div className={`chat__main ${isSideBarActive ? "active" : ""}`} style={{height: window.innerHeight}}>
             {fetchingLocation && <LoaderSkeleton height={`${window.innerHeight}px`} />}
             <div id="messages" className="chat__messages">
               <Messages data={messages} />
