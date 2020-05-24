@@ -40,7 +40,7 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 const port = process.env.PORT || 5000
-const publicDirectoryPath = path.join(__dirname, '../public')
+const publicDirectoryPath = path.join(__dirname, '../client/public')
 
 // console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 // if (process.env.NODE_ENV === 'production') {
