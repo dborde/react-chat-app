@@ -1,16 +1,28 @@
 # react-chat-app
 
-# Create React App Steps
-1. mkdir personal
-2. cd personal
-3. npm init
-4. npm install create-react-app
-5. npx create-react-app react-chat-app
-6. cd react-chat-app
-7. yarn dev
+### [Online Demo](https://borde-react-chat-app.herokuapp.com/)
 
-----
+# About
+Real-time chat application built using React and Node and Socket.io
 
-# Install dependencies
-1. yarn install socket.io@2.20
-2. yarn add nodemon --dev
+
+# Getting Started
+1. Clone the repo
+2. cd to root
+3. yarn install
+4. cd to client
+5. yarn install
+
+
+# dev dependencies
+(To install dev dependencies with yarn, use yarn -dev add <dependency>)
+1. concurrently
+2. nodemon
+3. cross-env
+
+
+# Prepare and deploy build to production on Heroku
+1. yarn heroku-postbuild-yarn
+2. git add .
+3. git commit -m 'changes'
+4. git push heroku master
