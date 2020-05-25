@@ -40,9 +40,15 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 const port = process.env.PORT || 5000
-const publicDirectoryPath = path.join(__dirname, '../client/public')
 
-app.use(express.static(publicDirectoryPath))
+if (process.env.NODE_ENV === 'production') {
+  const publicDirectoryPath = path.join(__dirname, '../client/build')
+  app.use(express.static(publicDirectoryPath))
+  
+} else {
+  const publicDirectoryPath = path.join(__dirname, '../client/public')
+  app.use(express.static(publicDirectoryPath))
+}
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicDirectoryPath, 'index.html'));
@@ -54,14 +60,6 @@ io.on('connection', (socket) => {
   socket.emit('roomsList', {
     rooms: getRoomsList()
   })
-  
-  // TODO remove
-  socket.emit('message', 'Welcome!')
-
-  socket.on('sendMessage', (message) => {
-    io.emit('message', message)
-  })
-  // End TODO remove
 
   socket.on('join', ({ username, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, username, room })
@@ -83,7 +81,7 @@ io.on('connection', (socket) => {
       rooms: getRoomsList()
     })
     
-    // callback()
+    callback()
   })
 
   socket.on('sendMessage', (message, callback) => {

@@ -7,7 +7,7 @@ import Messages from "../components/messages";
 import Users from "../components/users";
 import { ActiveRooms } from "../components/rooms";
 
-const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/";
+const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
 
 const socket = io(ENDPOINT);
 
@@ -139,13 +139,11 @@ class Chat extends Component {
   };
 
   switchRoom = (newroom) => {
-    const username = this.props.match.params.username
-    
-    socket.emit('switchRoom', username, newroom );
+    const username = this.props.match.params.username;
 
-    // this.props.history.push(`/chat/${username}/${newroom}`)
-    window.location.href = `/chat/${username}/${newroom}`
-    
+    socket.emit('switchRoom', username, newroom );
+      // this.props.history.push(`/chat/${username}/${newroom}`)
+      window.location.href = `/chat/${username}/${newroom}`
   }
 
   sendLocation = e => {
@@ -177,7 +175,7 @@ class Chat extends Component {
               <Users users={users} room={room}/>
             </div>
             <div id="sidebar-rooms">
-              <ActiveRooms rooms={rooms} switchRoom={this.switchRoom}/>
+              <ActiveRooms rooms={rooms} currentRoom={this.props.match.params.room} switchRoom={this.switchRoom}/>
             </div>
           </div>
 

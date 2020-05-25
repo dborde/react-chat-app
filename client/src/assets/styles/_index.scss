@@ -253,6 +253,10 @@ li.switch-room {
     background: $gray-light;
     border: 1px solid $gray-dark;
   }
+
+  &.disabled {
+    pointer-events: none;
+  }
   
   & button {
     background: none;

@@ -16,7 +16,7 @@ export const ActiveRooms = (props) => {
       <h3 className="list-title">Active Rooms</h3>
       <ul className="rooms">
       {props.rooms.map((room, index) => typeof room !== 'undefined' ? (
-        <li className="switch-room" key={index}><button onClick={()=>props.switchRoom(room)}>{room}</button></li>
+        <li className={`switch-room ${props.currentRoom === room ? "disabled" : ""}`} key={index}><button disabled={props.currentRoom === room} onClick={()=>props.switchRoom(room)}>{room}</button></li>
       ) : null )}
       </ul>
     </React.Fragment>
