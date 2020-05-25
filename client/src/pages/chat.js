@@ -7,7 +7,7 @@ import Messages from "../components/messages";
 import Users from "../components/users";
 import { ActiveRooms } from "../components/rooms";
 
-const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
+const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/"; //process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
 
 const socket = io(ENDPOINT);
 
