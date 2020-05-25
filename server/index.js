@@ -27,7 +27,11 @@ const port = process.env.PORT || 5000
 //   app.use(express.static(publicDirectoryPath))
 // }
 
+console.log('process.env.NODE_ENV')
+console.log(process.env.NODE_ENV)
+
 const publicDirectoryPath = path.join(__dirname, '../client/build')
+
 app.use(express.static(publicDirectoryPath))
 
 app.get('*', (req, res) => {
