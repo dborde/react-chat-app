@@ -7,7 +7,7 @@ import Messages from "../components/messages";
 import Users from "../components/users";
 import { ActiveRooms } from "../components/rooms";
 
-const ENDPOINT = "https://borde-react-chat-app.herokuapp.com/"; //process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
+const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
 
 const socket = io(ENDPOINT);
 
@@ -36,6 +36,7 @@ class Chat extends Component {
       username: this.props.match.params.username,
       room: this.props.match.params.room
     }
+
     socket.emit('join', params, (error) => {
       if (error) {
         alert(error);
@@ -175,11 +176,11 @@ class Chat extends Component {
               <Users users={users} room={room}/>
             </div>
             <div id="sidebar-rooms">
-              <ActiveRooms rooms={rooms} currentRoom={this.props.match.params.room} switchRoom={this.switchRoom}/>
+              <ActiveRooms rooms={rooms} currentRoom={room} switchRoom={this.switchRoom}/>
             </div>
           </div>
 
-          <div className={`chat__main ${isSideBarActive ? "active" : ""}`} style={{height: window.innerHeight}}>
+          <div className={`chat__main ${isSideBarActive ? "active" : ""}`} style={{height: document.documentElement.clientHeight}}>
             {fetchingLocation && <LoaderSkeleton height={`${window.innerHeight}px`} />}
             <div id="messages" className="chat__messages">
               <Messages data={messages} />
