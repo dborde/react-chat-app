@@ -18,25 +18,24 @@ const io = socketio(server)
 
 const port = process.env.PORT || 5000
 
-// if (process.env.NODE_ENV === 'production') {
-//   const publicDirectoryPath = path.join(__dirname, '../client/build')
-//   app.use(express.static(publicDirectoryPath))
-  
-// } else {
-//   const publicDirectoryPath = path.join(__dirname, '../client/public')
-//   app.use(express.static(publicDirectoryPath))
-// }
-
 console.log('process.env.NODE_ENV')
 console.log(process.env.NODE_ENV)
 
-const publicDirectoryPath = path.join(__dirname, '../client/build')
+let publicDirectoryPath = path.join(__dirname, '../client/build')
+
+if (process.env.NODE_ENV === 'dev') {
+  publicDirectoryPath = path.join(__dirname, '../client/public')
+  app.use(express.static(publicDirectoryPath))
+}
+
+console.log('publicDirectoryPath')
+console.log(publicDirectoryPath)
 
 app.use(express.static(publicDirectoryPath))
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicDirectoryPath, 'index.html'));
-});
+})
 
 io.on('connection', (socket) => {
   console.log('New WebSocket connection')
