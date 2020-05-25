@@ -40,8 +40,8 @@ class Chat extends Component {
     socket.emit('join', params, (error) => {
       if (error) {
         alert(error);
-        // this.props.history.push('/');
-        window.location.href = '/';
+        this.props.history.push('/');
+        // window.location.href = '/';
       }
     });
 
@@ -143,8 +143,8 @@ class Chat extends Component {
     const username = this.props.match.params.username;
 
     socket.emit('switchRoom', username, newroom );
-      // this.props.history.push(`/chat/${username}/${newroom}`)
-      window.location.href = `/chat/${username}/${newroom}`
+      this.props.history.push(`/chat/${username}/${newroom}`)
+      // window.location.href = `/chat/${username}/${newroom}`
   }
 
   sendLocation = e => {
