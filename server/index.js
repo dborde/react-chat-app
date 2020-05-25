@@ -1,26 +1,3 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
-
-// const app = express();
-// const port = process.env.PORT || 5000;
-
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.get('/api/hello', (req, res) => {
-//   res.send({ express: 'Hello From Express' });
-// });
-
-// app.post('/api/world', (req, res) => {
-//   console.log(req.body);
-//   res.send(
-  
-//     `I received your POST request. This is what you sent me: ${req.body.post}`,
-//   );
-// });
-
-// app.listen(port, () => console.log(`Listening on port ${port}`));
-
 const path = require('path')
 const http = require('http')
 const express = require('express')
@@ -41,14 +18,17 @@ const io = socketio(server)
 
 const port = process.env.PORT || 5000
 
-if (process.env.NODE_ENV === 'production') {
-  const publicDirectoryPath = path.join(__dirname, '../client/build')
-  app.use(express.static(publicDirectoryPath))
+// if (process.env.NODE_ENV === 'production') {
+//   const publicDirectoryPath = path.join(__dirname, '../client/build')
+//   app.use(express.static(publicDirectoryPath))
   
-} else {
-  const publicDirectoryPath = path.join(__dirname, '../client/public')
-  app.use(express.static(publicDirectoryPath))
-}
+// } else {
+//   const publicDirectoryPath = path.join(__dirname, '../client/public')
+//   app.use(express.static(publicDirectoryPath))
+// }
+
+const publicDirectoryPath = path.join(__dirname, '../client/build')
+app.use(express.static(publicDirectoryPath))
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(publicDirectoryPath, 'index.html'));
