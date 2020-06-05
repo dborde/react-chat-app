@@ -1,2 +1,7 @@
 node_modules/
 .DS_Store
+chat-class.js
+join-class.js
+MessageForm.js
+SideBar.js
+context/chat-context.js
