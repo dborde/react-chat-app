@@ -1,58 +1,75 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import { withRouter } from 'react-router-dom';
 import io from "socket.io-client";
 import LoaderSkeleton from "../components/loader";
 import moment from "moment";
-import Messages from "../components/messages";
-import Users from "../components/users";
-import { ActiveRooms } from "../components/rooms";
+import Messages from "../components/Messages";
+import Users from "../components/Users";
+import { ActiveRooms } from "../components/Rooms";
 
 const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
-
 const socket = io(ENDPOINT);
 
-const initialState = {
-  disabled: false,
-  fetchingLocation: false,
-  isSideBarActive: false,
-  message: '',
-  messages: [],
-  room: '',
-  rooms: [],
-  users: []
+const messagesReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_MESSAGE':
+      return action.message
+    case 'SET_MESSAGES':
+      return [
+        ...state,
+        action.data
+      ]
+    default:
+      return state
+  }
 }
 
-class Chat extends Component {
-  constructor(props) {
-    super(props);
-    this.textInput = React.createRef();
-    this.state = {
-      ...initialState
-    }
-  }
-
-  componentDidMount() {
+const Chat = (props) =>{
+  const textInput = React.useRef();
+  const [messages, dispatchMessages] = useReducer(messagesReducer, []);
+  const [disabled, setDisabled] = useState(false);
+  const [fetchingLocation, setFetchingLocation] = useState(false);
+  const [isSideBarActive, setIsSideBarActive] = useState(false);
+  const [message, setMessage] = useState('');
+  const [rooms, setRooms] = useState([]);
+  const [roomData, setRoomData] = useState({room: '', users: []});
+    
+  useEffect(() => {
     const params = {
-      username: this.props.match.params.username,
-      room: this.props.match.params.room
+      username: props.match.params.username,
+      room: props.match.params.room
     }
 
     socket.emit('join', params, (error) => {
       if (error) {
         alert(error);
-        // this.props.history.push('/');
-        window.location.href = '/';
+        props.history.push('/');
       }
     });
 
+    socket.on('roomData', ({room, users}) => {
+      setRoomData({room, users})
+    });
+
+    socket.on('roomsList', ({rooms}) => {
+      setRooms(rooms);
+      
+    });
+
+  }, [props.match.params.username, props.match.params.room, props.history]);
+
+  useEffect(() => {
     socket.on('message', (message) => {
       const data = {
         username: message.username,
         message: message.text,
         createdAt: moment(message.createdAt).format('h:mm a')
       }
-      this.textInput?.current && this.textInput.current.focus();
-      this.setState({messages: [...this.state.messages, data]}, () => this.autoscroll());
+      textInput?.current && textInput.current.focus();
+      dispatchMessages({ type: 'SET_MESSAGES', data });
+
+      autoscroll();
+      
     });
 
     socket.on('locationMessage', (message) => {
@@ -61,19 +78,15 @@ class Chat extends Component {
         url: message.url,
         createdAt: moment(message.createdAt).format('h:mm a')
       }
-      this.setState({messages: [...this.state.messages, data]}, () => this.autoscroll());
+      dispatchMessages({ type: 'SET_MESSAGES', data });
+
+      autoscroll();
+      
     });
 
-    socket.on('roomData', ({room, users}) => {
-      this.setState({users, room});
-    });
+  }, []);
 
-    socket.on('roomsList', ({rooms}) => {
-      this.setState({rooms});
-    });
-  }
-
-  autoscroll = () => {
+  const autoscroll = () => {
     const $messagesWrap = document.querySelector('#messages');
     const $messages = document.querySelector('#messages div');
     // New message element
@@ -100,38 +113,24 @@ class Chat extends Component {
     }
   }
 
-  join = () => {
-    const { username, room } = this.state;
-    if (username && room) {
-      this.props.history.push(`/chat/${username}/${room}`)
-    }
+  const toggleSideBar = () => {
+    setIsSideBarActive(!isSideBarActive);
   }
 
-  toggleSideBar = () => {
-    this.setState({isSideBarActive: !this.state.isSideBarActive})
+  const onInputUpdate = e => {
+    setMessage(e.target.value);
   }
 
-  onInputUpdate = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  clearForm() {
-    this.setState({
-        message: ''
-    });
+  const clearForm = () => {
+    setMessage('');
   } 
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const message = this.state.message;
-    this.setState({ disabled: true });
+    setDisabled(true)
     socket.emit('sendMessage', message, (error) => {
-      this.setState({ disabled: false });
-      this.clearForm();
+      setDisabled(false);
+      clearForm();
 
        if (error) {
         return console.log(error)
@@ -139,83 +138,81 @@ class Chat extends Component {
     })  
   };
 
-  switchRoom = (newroom) => {
-    const username = this.props.match.params.username;
+  const switchRoom = (newroom) => {
+    const username = props.match.params.username;
 
     socket.emit('switchRoom', username, newroom );
-      // this.props.history.push(`/chat/${username}/${newroom}`)
-      window.location.href = `/chat/${username}/${newroom}`
+      props.history.push(`/chat/${username}/${newroom}`);
   }
 
-  sendLocation = e => {
+  const sendLocation = e => {
     e.preventDefault();
     if (!navigator.geolocation) {
       return alert('Geolocation is not supported by your browser.')
     }
     
-    this.setState({ disabled: true, fetchingLocation: true });
+    setDisabled(true);
+    setFetchingLocation(true);
   
     navigator.geolocation.getCurrentPosition((position) => {
       socket.emit('sendLocation', {
         lat: position.coords.latitude,
         long: position.coords.longitude
       }, () => {
-        this.setState({ disabled: false, fetchingLocation: false });
+        setDisabled(false);
+        setFetchingLocation(false);
       })
     });
   }
 
-  render() {
-    const { disabled, fetchingLocation, isSideBarActive, message, messages, room, rooms, users } = this.state;
-    return (
-      <React.Fragment>
-        <div className="chat" style={{height: window.innerHeight}}>
-          <i onClick={this.toggleSideBar} className={`mobile-menu fas fa-bars ${isSideBarActive ? "active" : ""}`}></i>
-          <div id="sidebar" className={`chat__sidebar ${isSideBarActive ? "active" : ""}`} style={{height: window.innerHeight}}>
-            <div id="sidebar-users">
-              <Users users={users} room={room}/>
-            </div>
-            <div id="sidebar-rooms">
-              <ActiveRooms rooms={rooms} currentRoom={room} switchRoom={this.switchRoom}/>
-            </div>
+  return (
+    <React.Fragment>
+      <div className="chat" style={{height: window.innerHeight}}>
+        <i onClick={toggleSideBar} className={`mobile-menu fas fa-bars ${isSideBarActive ? "active" : ""}`}></i>
+        <div id="sidebar" className={`chat__sidebar ${isSideBarActive ? "active" : ""}`} style={{height: window.innerHeight}}>
+          <div id="sidebar-users">
+            <Users roomData={roomData}/>
           </div>
-
-          <div className={`chat__main ${isSideBarActive ? "active" : ""}`} style={{height: document.documentElement.clientHeight}}>
-            {fetchingLocation && <LoaderSkeleton height={`${window.innerHeight}px`} />}
-            <div id="messages" className="chat__messages">
-              <Messages data={messages} />
-            </div>
-            <div className="compose" onSubmit={(e) => this.handleSubmit(e)}>
-              <form id="message-form">
-                <input
-                  name="message"
-                  placeholder="Type your message..."
-                  autoComplete="off"
-                  value={message}
-                  onChange={this.onInputUpdate}
-                  ref={this.textInput}
-                />
-                <div className="btnWrap">
-                  <button disabled={disabled} type="submit" className="btn">
-                    <i className="tooltip fab fa-telegram-plane" alt="send message" title="send message">
-                      <span className="tooltiptext">Send Message</span>
-                    </i>
-                  </button>
-                  <button disabled={disabled} id="send-location" className="btn" onClick={(e) => this.sendLocation(e)}>
-                    <i className="tooltip far fa-compass" alt="send location" title="send location">
-                      <span className="tooltiptext">Send Location</span>
-                    </i>         
-                  </button>
-                </div>    
-              </form>
-            </div>
-
+          <div id="sidebar-rooms">
+            <ActiveRooms rooms={rooms} currentRoom={roomData.room} switchRoom={switchRoom} />
           </div>
-
         </div>
-      </React.Fragment>
-    );
-  }
+
+        <div className={`chat__main ${isSideBarActive ? "active" : ""}`} style={{height: document.documentElement.clientHeight}}>
+          {fetchingLocation && <LoaderSkeleton height={`${window.innerHeight}px`} />}
+          <div id="messages" className="chat__messages">
+            <Messages data={messages} />
+          </div>
+
+          <div className="compose" onSubmit={(e) => handleSubmit(e)}>
+            <form id="message-form">
+              <input
+                name="message"
+                placeholder="Type your message..."
+                autoComplete="off"
+                value={message}
+                onChange={onInputUpdate}
+                ref={textInput}
+              />
+              <div className="btnWrap">
+                <button disabled={disabled} type="submit" className="btn">
+                  <i className="tooltip fab fa-telegram-plane" alt="send message" title="send message">
+                    <span className="tooltiptext">Send Message</span>
+                  </i>
+                </button>
+                <button disabled={disabled} id="send-location" className="btn" onClick={(e) => sendLocation(e)}>
+                  <i className="tooltip far fa-compass" alt="send location" title="send location">
+                    <span className="tooltiptext">Send Location</span>
+                  </i>         
+                </button>
+              </div>    
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </React.Fragment>
+  );
 }
 
 export default withRouter(Chat);
