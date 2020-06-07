@@ -6,7 +6,7 @@
 * {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;  
+  padding: 0;
 }
 
 html {
@@ -23,7 +23,8 @@ body {
   font-family: Helvetica, Arial, sans-serif;
 }
 
-h1, h2 {
+h1,
+h2 {
   margin-bottom: $space;
 }
 
@@ -41,7 +42,7 @@ input {
 }
 
 button {
-  background: #7C5CBF;
+  background: #7c5cbf;
   border: none;
   color: white;
   cursor: pointer;
@@ -51,8 +52,7 @@ button {
   padding: $space-small;
   text-overflow: ellipsis;
   text-transform: uppercase;
-  transition: background .3s ease;
-
+  transition: background 0.3s ease;
 }
 
 .btn {
@@ -70,7 +70,7 @@ button {
 
 .btn:disabled {
   background: $gray-light;
-  cursor: default; 
+  cursor: default;
 }
 
 button + button {
@@ -92,24 +92,26 @@ button:disabled {
   align-items: center;
   background: #333744;
   display: flex;
-  height: 100vh;  
+  height: 100vh;
   justify-content: center;
   width: 100vw;
 }
 
 .centered-form__box {
-  background: #F7F7FA;
+  background: #f7f7fa;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
   margin: 2rem auto;
   padding: $space-large;
   width: 320px;
 }
 
-.centered-form button, .centered-form__box button {
+.centered-form button,
+.centered-form__box button {
   width: 100%;
 }
 
-.centered-form input, .centered-form__box input {
+.centered-form input,
+.centered-form__box input {
   margin-bottom: $space;
   width: 100%;
 }
@@ -172,19 +174,19 @@ button:disabled {
   padding: $space-large $space-large 0 $space-large;
 
   @include media(small) {
-    padding:  $space-large * 2  $space-large 0 $space-large * 2;
+    padding: $space-large * 2 $space-large 0 $space-large * 2;
   }
 }
 
 // ------------- MESSAGE STYLES ------------- //
 
 .message {
-  margin-bottom: $space;   
+  margin-bottom: $space;
 }
 
 .message__name {
   font-size: 1rem;
-  font-weight: $font-weight-bold; 
+  font-weight: $font-weight-bold;
   margin-right: $space-small;
 }
 
@@ -194,7 +196,7 @@ button:disabled {
 }
 
 .message a {
-  color: #0070CC;
+  color: #0070cc;
 }
 
 // ------------- MESSAGE COMPOSITION STYLES ------------- //
@@ -239,7 +241,8 @@ button:disabled {
   padding: $space-small $space-large 0 $space-large;
 }
 
-.users, .rooms {
+.users,
+.rooms {
   font-weight: $font-weight-normal;
   list-style-type: none;
   padding: $space-small $space-large $space-large $space-large;
@@ -257,12 +260,12 @@ li.switch-room {
   &.disabled {
     pointer-events: none;
   }
-  
+
   & button {
     background: none;
     color: $gray-dark;
     text-align: left;
-    width: 100%
+    width: 100%;
   }
 }
 
@@ -316,7 +319,7 @@ li.switch-room {
     border-width: 5px;
     content: "";
     left: 50%;
-    margin-left:34px;
+    margin-left: 34px;
     position: absolute;
     top: 100%;
   }

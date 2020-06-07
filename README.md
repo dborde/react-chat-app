@@ -19,6 +19,7 @@ Real-time chat application built using React and Node and Socket.io
 1. concurrently
 2. nodemon
 3. cross-env
+4. prettier (run $npx prettier --write .)
 
 
 # Prepare and deploy build to production on Heroku
