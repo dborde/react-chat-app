@@ -271,7 +271,7 @@ li.switch-room {
 
 .react-skeleton-load {
   align-items: center;
-  display: flex;
+  display: flex !important; // !important needed for iPhone
   justify-content: center;
 
   &:after {
