@@ -1,4 +1,8 @@
 # Create React App Steps
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8b62d929605da2c3ad901e1a69255bb809feae17
 1. mkdir myapp
 2. cd myapp
 3. npm init
@@ -8,6 +12,7 @@
 7. yarn dev
 
 ### Useful links
+<<<<<<< HEAD
 * [i-cant-install-react-using-npx-create-react-app](https://stackoverflow.com/questions/53657920/i-cant-install-react-using-npx-create-react-app)
 
 * [how-to-make-create-react-app-work-with-a-node-backend](https://www.freecodecamp.org/news/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0/)
@@ -23,14 +28,33 @@
 * [how-to-deploy-a-production-react-app](https://medium.com/jeremy-gottfrieds-tech-blog/tutorial-how-to-deploy-a-production-react-app-to-heroku-c4831dfcfa08)
 
 * [react-real-time-chat-app](https://github.com/simpletut/react-real-time-chat-app)
+=======
 
-----
+- [i-cant-install-react-using-npx-create-react-app](https://stackoverflow.com/questions/53657920/i-cant-install-react-using-npx-create-react-app)
+
+- [how-to-make-create-react-app-work-with-a-node-backend](https://www.freecodecamp.org/news/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0/)
+
+- [fcc-socket-client](https://github.com/akash-joshi/fcc-socket-client/blob/master/src/App.js)
+
+- [socket-react](https://www.valentinog.com/blog/socket-react/)
+
+- [socket-io-tutorial-that-isn-t-a-chat-app-with-react](https://dev.to/captainpandaz/a-socket-io-tutorial-that-isn-t-a-chat-app-with-react-js-58jh)
+
+- [build-a-chat-app-using-react-hooks](https://css-tricks.com/build-a-chat-app-using-react-hooks-in-100-lines-of-code/)
+
+- [how-to-deploy-a-production-react-app](https://medium.com/jeremy-gottfrieds-tech-blog/tutorial-how-to-deploy-a-production-react-app-to-heroku-c4831dfcfa08)
+
+- [react-real-time-chat-app](https://github.com/simpletut/react-real-time-chat-app)
+>>>>>>> 8b62d929605da2c3ad901e1a69255bb809feae17
+
+---
 
 # Install dependencies
+
 1. yarn install socket.io@2.20
 2. yarn -dev add nodemon
 
-----
+---
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

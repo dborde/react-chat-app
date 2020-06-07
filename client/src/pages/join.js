@@ -1,69 +1,71 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
 import io from "socket.io-client";
-import { Rooms } from "../components/rooms";
+import { Rooms } from "../components/Rooms";
 
-const ENDPOINT = process.env.NODE_ENV === 'production' ? "https://borde-react-chat-app.herokuapp.com/" : "http://localhost:5000";
-
+const ENDPOINT =
+  process.env.NODE_ENV === "production"
+    ? "https://borde-react-chat-app.herokuapp.com/"
+    : "http://localhost:5000";
 const socket = io(ENDPOINT);
 
-const initialState = { 
-  room: '',
-  rooms: [],
-  username: ''
-}
+const Join = (props) => {
+  const [rooms, setRooms] = useState([]);
+  const [values, setValues] = useState({ room: "", username: "" });
 
-class Join extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ...initialState
-    }
-  }
-
-  componentDidMount() {
-    socket.on('roomsList', ( {rooms} ) => {
-      this.setState({rooms});
+  useEffect(() => {
+    socket.on("roomsList", ({ rooms }) => {
+      setRooms(rooms);
     });
-  }
+  }, [rooms]);
 
-  componentWillUnmount(){
-    socket.off('roomsList');
-  }
+  useEffect(() => {
+    return () => socket.off("roomsList");
+  }, []);
 
-  onInputUpdate = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    this.setState({
-      [name]: value
-    });
-  }
+  const onInputUpdate = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
 
-  join = () => {
-    const { username, room } = this.state;
+  const join = () => {
+    const { username, room } = values;
     if (username && room) {
-      this.props.history.push(`/chat/${username}/${room}`)
+      props.history.push(`/chat/${username}/${room}`);
     }
-  }
+  };
 
-  render() {
-    const { room, rooms, username } = this.state;
-    return (
-      <div className="row">
-        <div className="col-xs">
-          <form className="centered-form__box">
-            <h2>Join</h2>
-            <input name="username" placeholder="Display name" autoComplete="off" value={username} onChange={this.onInputUpdate} />
-            <input type="text" list="rooms" name="room" placeholder="Room" autoComplete="off" value={room} onChange={this.onInputUpdate} />
-            <datalist id="rooms">
-              <Rooms rooms={rooms} />
-            </datalist>
-            <button onClick={this.join}>Join</button>
-          </form>
-        </div>
+  return (
+    <div className="row">
+      <div className="col-xs">
+        <form className="centered-form__box">
+          <h2>Join</h2>
+          <input
+            name="username"
+            placeholder="Display name"
+            autoComplete="off"
+            value={values.username}
+            onChange={onInputUpdate}
+          />
+          <input
+            type="text"
+            list="rooms"
+            name="room"
+            placeholder="Room"
+            autoComplete="off"
+            value={values.room}
+            onChange={onInputUpdate}
+          />
+          <datalist id="rooms">
+            <Rooms rooms={rooms} />
+          </datalist>
+          <button onClick={join} type="button">
+            Join
+          </button>
+        </form>
       </div>
-    )
-  }
-}
+    </div>
+  );
+};
 
 export default withRouter(Join);
