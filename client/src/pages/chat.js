@@ -154,7 +154,7 @@ const Chat = (props) => {
           style={{ height: document.documentElement.clientHeight }}
         >
           {fetchingLocation && (
-            <aderSkeleton height={`${window.innerHeight}px`} />
+            <LoaderSkeleton height={`${window.innerHeight}px`} />
           )}
           <Messages />
           <MessageForm />
